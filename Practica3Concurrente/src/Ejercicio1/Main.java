@@ -2,7 +2,7 @@ package Ejercicio1;
 
 import java.util.concurrent.Semaphore;
 
-public class main {
+public class Main {
 
 	private static final int M = 10000, N = 1000;
 	public static int n = 0;

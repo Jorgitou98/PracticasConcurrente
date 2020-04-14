@@ -1,8 +1,8 @@
-package Ejercicio3;
+package Ejercicio2;
 
-public class main {
+public class Main {
 
-	private static final int M = 10000, N = 1000;
+	private static final int M = 1000, N = 1000;
 	
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub

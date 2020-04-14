@@ -1,8 +1,8 @@
-package Ejercicio2;
+package Ejercicio3;
 
-public class main {
+public class Main {
 
-	private static final int M = 1000, N = 1000;
+	private static final int M = 10000;
 	
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -30,11 +30,5 @@ public class main {
 			}});
 			hilos[i].start();
 		}
-		
-		for (int i = 0; i < 2*M; ++i) {
-			hilos[i].join();
-		}
-		
-		System.out.println("Ya han acabado\n");
 	}
 }
