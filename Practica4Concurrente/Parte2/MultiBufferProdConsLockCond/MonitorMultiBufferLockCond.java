@@ -25,13 +25,21 @@ public class MonitorMultiBufferLockCond {
 	
 	public ArrayList<Producto> consumir(int cantidad) throws InterruptedException {
 		lock.lock();
-		while(cont < cantidad) wait();
+		while(cont < cantidad) esperaCons.await();
 		ArrayList<Producto> consumidos = new ArrayList<Producto>();
+		// Consume la cantidad de elementos que quiere
 		for(int i = 0; i < cantidad; ++i) {
 			consumidos.add(buff[fin]);
 			fin = (fin + 1) % TAM;
 			cont--;
 		}
+		// Muestro los elementos consumidos para comprobar yo que funciona bien
+		System.out.print("Proceso que quería " + cantidad+ " elementos ha consumido: ");
+		for(Producto elem: consumidos) {
+			System.out.print(elem.getValor() + " ");
+		}
+		System.out.println();
+		
 		esperaProd.signalAll();
 		lock.unlock();
 		return consumidos;

@@ -25,6 +25,12 @@ public class MonitorMultiBuffer {
 			fin = (fin + 1) % TAM;
 			cont--;
 		}
+		// Muestro los elementos consumidos para comprobar yo que funciona bien
+		System.out.print("Proceso que quería " + cantidad+ " elementos ha consumido: ");
+		for(Producto elem: consumidos) {
+			System.out.print(elem.getValor() + " ");
+		}
+		System.out.println();
 		notifyAll();
 		return consumidos;
 	}

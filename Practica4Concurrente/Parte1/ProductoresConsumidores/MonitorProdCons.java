@@ -17,6 +17,8 @@ public class MonitorProdCons {
 		Producto p;
 		while(cont == 0) wait();
 		p = buff[fin];
+		// Muestro el producto consumido por consola. (Esto es solo para mí, para comprobar que funciona)
+		System.out.println("Consumido: " + p.getValor());
 		fin= (fin + 1) % TAM;
 		cont--;
 		notify();
