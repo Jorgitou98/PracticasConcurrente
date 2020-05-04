@@ -11,8 +11,8 @@ public class AlmacenImp implements Almacen{
 	public void almacenar(Producto producto) throws InterruptedException {
 		vacio.acquire();
 		buff = producto;
-		lleno.release();
-		
+		System.out.println("Elemento producido: " + producto.getValor());
+		lleno.release();		
 	}
 
 	@Override
@@ -20,6 +20,7 @@ public class AlmacenImp implements Almacen{
 		Producto p;
 		lleno.acquire();
 		p = buff;
+		System.out.println("Elemento consumido: " + p.getValor());
 		vacio.release();
 		return p;
 	}

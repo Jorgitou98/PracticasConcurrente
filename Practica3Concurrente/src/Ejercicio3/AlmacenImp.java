@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 
 public class AlmacenImp implements Almacen{
 	
-	private static final int TAM = 1000;
+	private static final int TAM = 10;
 	public Semaphore lleno = new Semaphore(0), vacio = new Semaphore(TAM);
 	public Semaphore mutexp = new Semaphore(1), mutexc = new Semaphore(1);
 	public Producto[] buff = new Producto[TAM];
@@ -14,6 +14,7 @@ public class AlmacenImp implements Almacen{
 		vacio.acquire();
 		mutexp.acquire();
 		buff[ini] = producto;
+		System.out.println("Elemento producido: " + producto.getValor());
 		ini = (ini + 1) % TAM;
 		mutexp.release();
 		lleno.release();
@@ -26,6 +27,7 @@ public class AlmacenImp implements Almacen{
 		lleno.acquire();
 		mutexc.acquire();
 		p = buff[fin];
+		System.out.println("Elemento consumido: " + p.getValor());
 		fin = (fin + 1) % TAM;
 		mutexc.release();
 		vacio.release();

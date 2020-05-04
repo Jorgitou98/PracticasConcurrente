@@ -10,7 +10,7 @@ public interface Almacen {
 	public void almacenar(Producto producto) throws InterruptedException;
 	/**
 	* Extrae el primer producto disponible. Si no hay productos el
-	* proceso que ejecute el m´etodo bloquear´a hasta que se almacene un
+	* proceso que ejecute el método bloqueará hasta que se almacene un
 	* dato.
 	 * @throws InterruptedException 
 	*/
