@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import javafx.util.Pair;
-
 public class LockBakery {
 	private static volatile int[] turnos;
 	private int m;
@@ -27,7 +25,7 @@ public class LockBakery {
 		turnos = turnos;
 		for (int j = 0; j < 2*m; ++j) {
 			if (j != i) {
-				while(turnos[j] != -1 && mayor(new Pair<Integer,Integer>(turnos[i], i), new Pair<Integer,Integer>(turnos[j], j))) {
+				while(turnos[j] != -1 && mayor(new Pair(turnos[i], i), new Pair(turnos[j], j))) {
 					Thread.yield(); //Esto es una cosa que dijo Arturo para que suelte el procesador (?)
 				}
 			}

@@ -8,6 +8,7 @@ public class MonitorProdCons {
 	synchronized void producir(Producto prod) throws InterruptedException {
 		while(cont == TAM) wait();
 		buff[ini] = prod;
+		System.out.println("Producido: " + prod.getValor());
 		ini = (ini + 1) % TAM;
 		cont++;
 		notify();

@@ -13,8 +13,6 @@ public class Producto {
 		this.valor = valor;
 	}
 
-
-
 	public int getValor() {
 		return valor;
 	}

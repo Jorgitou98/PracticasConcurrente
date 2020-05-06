@@ -2,6 +2,8 @@ package MultiBufferProdConsSync;
 
 import java.util.ArrayList;
 
+import MultiBufferProdConsLockCond.Producto;
+
 public class MonitorMultiBuffer {
 	private final int TAM = 500;
 	private Producto[] buff = new Producto[TAM];
@@ -14,6 +16,14 @@ public class MonitorMultiBuffer {
 			ini = (ini + 1) % TAM;
 			cont++;
 		}
+		
+		// Muestro los elementos producidos para comprobar yo que funciona bien
+		System.out.print("Proceso que producía " + prod.size() + " elementos ha producido: ");
+		for(Producto elem: prod) {
+			System.out.print(elem.getValor() + " ");
+		}
+		System.out.println();
+		
 		notifyAll();
 	}
 	
