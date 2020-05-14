@@ -17,7 +17,7 @@ private static LockBakery lock3 = new LockBakery(M);
 			hilos[i] = new Thread(()->funcionInc(j));
 			hilos[i].start();
 		}
-		
+
 		for (int i = M; i < 2*M; ++i) {
 			int j = i;
 			hilos[i] = new Thread(()->funcionDec(j));

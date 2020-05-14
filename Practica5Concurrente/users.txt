@@ -1,0 +1,6 @@
+juan
+ejemplo.txt iniQuijote.txt
+pepe
+probando.txt relatoBorges.txt
+jorge
+relatoBorges.txt iniQuijote.txt
