@@ -9,12 +9,11 @@ import java.util.TreeMap;
 
 public class MonitorUsuarios{
 	private Map<String, Pair<ObjectInputStream, ObjectOutputStream>> usuarios  = new TreeMap<String, Pair<ObjectInputStream, ObjectOutputStream>>();
-	
 	synchronized void anadeUsuarioConectado(String usuario, ObjectInputStream reader, ObjectOutputStream writer) {
 		usuarios.put(usuario, new Pair<>(reader, writer));
 	}
 	
-	synchronized void eiminaUsuarioConectado(String usuario) {
+	synchronized void eliminaUsuarioConectado(String usuario) {
 		usuarios.remove(usuario);
 	}
 	

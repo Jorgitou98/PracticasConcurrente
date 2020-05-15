@@ -11,7 +11,6 @@ public class MainCliente {
 		System.out.println("¿Cual es tu nombre de usuario?");
 		Scanner teclado = new Scanner(System.in);
 		String idUsuario = teclado.nextLine();
-		//teclado.close();
 		(new Cliente(Integer.parseInt(args[0]), idUsuario, InetAddress.getLocalHost())).ejecutaCliente();
 	}
 	

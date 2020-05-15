@@ -3,14 +3,13 @@ package Parte2;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.List;
 
 public class OyenteServidor extends Thread{
 	private ObjectInputStream reader;
 	private ObjectOutputStream writer;
 	
-	// Me guardo tambien una referncia al cliente que gestiono para tener acceso a su dir IP y su puerto cuando necesite mandarlo
+	// Me guardo tambien una referencia al cliente que gestiono para tener acceso a su dir IP y su puerto cuando necesite mandarlo
 	private Cliente miCliente;
 	public OyenteServidor(ObjectInputStream reader, ObjectOutputStream writer, Cliente miCliente) {
 		this.reader = reader;
@@ -51,19 +50,20 @@ public class OyenteServidor extends Thread{
 						MensajeEmitirFichero mEF = (MensajeEmitirFichero) m;
 						
 						// Devolvemos un MensajePreparadoClienteServidor a nuestro OyenteCliente. Ponemos en su campo fin el id del cliente que nos lo pidio: mEF.getOrigen()
-						writer.writeObject(new MensajePreparadoClienteServidor("OyenteServidor", mEF.getOrigen() , miCliente.getDirHost(), miCliente.getPuerto()));
+						// Y el puerto donde la esperamos para mandale el fichero en otro porceso Emisor
+						writer.writeObject(new MensajePreparadoClienteServidor("OyenteServidor", mEF.getOrigen() , miCliente.getDirHost(), mEF.getPuerto()));
 						System.out.println("---------------------------------------");
 						System.out.println("Mi cliente " + miCliente.getIdUsuario() + " va a emitir el fichero " + mEF.getFicheroAEmitir());
 						System.out.println("---------------------------------------");
 						
 						// Creamos un proceso emisor que esperará al otro proceso Receptor para mandar el fichero de forma Peer to Peer al cliente que lo pidio
-						(new Emisor(miCliente.getPuerto()+1, mEF.getFicheroAEmitir())).start();
+						(new Emisor(mEF.getPuerto(), mEF.getFicheroAEmitir())).start();
 						break;
 					case PREPARADOSERVIDORCLIENTE:
 						MensajePreparadoServidorCliente mPSC = (MensajePreparadoServidorCliente) m;
 						
 						// Creamos un proceso Receptor que recibirá el fichero directamente del proceso Emidor creado por el cliente propietario del fichero
-						(new Receptor(mPSC.getDirHost(), mPSC.getPuerto()+1)).start();
+						(new Receptor(mPSC.getDirHost(), mPSC.getPuerto())).start();
 						break;
 					case FICHEROSINPROPIETARIO:
 						MensajeFicheroSinPropietario mFSP = (MensajeFicheroSinPropietario) m;

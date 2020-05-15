@@ -1,5 +1,6 @@
 package Parte2;
 
+@SuppressWarnings("serial")
 public class MensajeConfirmaCierre extends Mensaje{
 
 	public MensajeConfirmaCierre(String origen, String fin) {

@@ -2,6 +2,7 @@ package Parte2;
 
 import java.net.InetAddress;
 
+@SuppressWarnings("serial")
 public class MensajePreparadoClienteServidor extends Mensaje {
 	
 	InetAddress dirHost;

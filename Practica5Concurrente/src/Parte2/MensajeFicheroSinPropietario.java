@@ -1,5 +1,6 @@
 package Parte2;
 
+@SuppressWarnings("serial")
 public class MensajeFicheroSinPropietario extends Mensaje{
 	String nombreFicheroSinPropietario;
 

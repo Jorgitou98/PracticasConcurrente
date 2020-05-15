@@ -1,3 +1,4 @@
+
 package Parte2;
 
 import java.io.FileInputStream;
@@ -31,6 +32,5 @@ public class Emisor extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

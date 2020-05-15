@@ -2,6 +2,7 @@ package Parte2;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public abstract class Mensaje implements Serializable{
 	
 	private String origen, fin;

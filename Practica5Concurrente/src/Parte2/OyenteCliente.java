@@ -3,7 +3,6 @@ package Parte2;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,32 +33,16 @@ public class OyenteCliente extends Thread{
 					idMiCliente = mSC.getIdCliente();
 					
 					/* Compruebo si el usuario está o no registrado. 
-					 * En caso de que esté, simplemente lo añado a los conectados.
-					 * Si no, actualizo la tablas de registrados cogiendo sendos mutex y actualizo también la de conectados.
-					 * 
+					 * En caso de que lo esté, simplemente lo añado a los conectados, pero no cambio nada de sus lista de ficheros por ejemplo.
+					 * Si no, actualizo la tablas llamando a los métodos adecuados de los monitores.
+					 * Si se registra un nuevo usuario que no estaba en el sistema añado en la otra tabla a cada uno de sus ficheros a él como propietario
 					 */
-					Servidor.semInfoUsuariosDelSistema.acquire();
-					if(Servidor.infoUsuariosDelSistema.containsKey(idMiCliente)) {
-						Servidor.semInfoUsuariosDelSistema.release();
-					}
-					else {
-						Servidor.infoUsuariosDelSistema.put(idMiCliente, mSC.getListaFicheros());
-						Servidor.semInfoUsuariosDelSistema.release();
-						Servidor.semInformacionFichero.acquire();
-						for(String fichero: mSC.getListaFicheros()) {
-							if(Servidor.informacionFichero.containsKey(fichero)) {
-								Servidor.informacionFichero.get(fichero).add(idMiCliente);
-							}
-							else {
-								List<String> usuariosFich = new ArrayList<>();
-								usuariosFich.add(idMiCliente);
-								Servidor.informacionFichero.put(fichero, usuariosFich);
-							}
-						}
-						Servidor.semInformacionFichero.release();
-						Servidor.monitorUsuarios.anadeUsuarioConectado(idMiCliente, reader, writer);
-					}
 					
+					if(Servidor.monitorInfoUsuarioSistema.anadeUsuarioAlSistema(idMiCliente, mSC.getListaFicheros())) {
+						for(String fichero: mSC.getListaFicheros()) {
+							Servidor.monitorInfoFichero.anadePropietario(fichero, idMiCliente);
+						}
+					}			
 					// En ambos casos lo añado como conectado
 					Servidor.monitorUsuarios.anadeUsuarioConectado(idMiCliente, reader, writer);
 					
@@ -78,12 +61,9 @@ public class OyenteCliente extends Thread{
 					
 					//Para cada usuario registrado le añadimos la lista de los ficheros de los que es propietario
 					
-					Servidor.semInfoUsuariosDelSistema.acquire();
 					for(String clienteConectado: listaUsuariosConectados) {
-						usuariosConectadosConListaFicheros.add(new Pair<>(clienteConectado, Servidor.infoUsuariosDelSistema.get(clienteConectado)));
-					}
-					Servidor.semInfoUsuariosDelSistema.release();
-					
+						usuariosConectadosConListaFicheros.add(new Pair<>(clienteConectado, Servidor.monitorInfoUsuarioSistema.dameListaFicheros(clienteConectado)));
+					}					
 					// Enviamos la lista elaborada
 					writer.writeObject(new MensajeConfirmaListaUsuarios("Oyente cliente", idMiCliente,  usuariosConectadosConListaFicheros));
 					break;
@@ -96,22 +76,25 @@ public class OyenteCliente extends Thread{
 					String fichero = mPF.getNombreFicheroPedido(), propietarioPedir = null;
 					
 					// Busco un propietario del fichero que este conectado, de lo contrario no tendré flujo para comunicarme con él
-					Servidor.semInformacionFichero.acquire();
-					if(Servidor.informacionFichero.containsKey(fichero)) {
-						for(String propietario: Servidor.informacionFichero.get(fichero)) {
+					// Obtengo la lista de propietarios del fichero. null si no hay ninguno
+					List<String> listaFicheros = Servidor.monitorInfoFichero.dameListaPropietarios(fichero);
+					
+					// Si no es null, la recorro en busca de algun propietario que guardo en propietarioPedir
+					if(listaFicheros != null) {
+						for(String propietario: listaFicheros) {
 							if(Servidor.monitorUsuarios.estaConectado(propietario)) {
 								propietarioPedir = propietario;
 								break;
 							}
 						}
 					}
-					Servidor.semInformacionFichero.release();
 					
 					/* Si no hemos encontrado ningún propietario del fichero pedido mandamos un MensajeFicheroSinPropietario
-					 * Si lo hemos encontrado bucamos el flujo par contactar con el propietario y le mandamos un MensajeEmitirFichero
+					 * Si lo hemos encontrado buscamos el flujo para contactar con el propietario y le mandamos un MensajeEmitirFichero
+					 * En este segundo caso obtenemos un puerto disponible para realizar el envío, dicho puerto lo pasamos en el propio mensaje
 					 */
 					if(propietarioPedir == null) writer.writeObject(new MensajeFicheroSinPropietario("Oyente cliente", idMiCliente, fichero));
-					else Servidor.monitorUsuarios.obtenerWrite(propietarioPedir).writeObject(new MensajeEmitirFichero(idMiCliente, propietarioPedir, fichero));
+					else Servidor.monitorUsuarios.obtenerWrite(propietarioPedir).writeObject(new MensajeEmitirFichero(idMiCliente, propietarioPedir, fichero, Servidor.obtenerPrimerPuertoDisp()));
 					
 					break;
 				case PREPARADOCLIENTESERVIDOR:
@@ -123,7 +106,7 @@ public class OyenteCliente extends Thread{
 				case CERRARCONEXION:
 					
 					// Borramos la información del usuario como conectado. Pero no como registrado
-					Servidor.monitorUsuarios.eiminaUsuarioConectado(idMiCliente);
+					Servidor.monitorUsuarios.eliminaUsuarioConectado(idMiCliente);
 
 					//Enviamos un mensaje confirmando el cierre de conexion
 					writer.writeObject(new MensajeConfirmaCierre("Oyente cliente", idMiCliente));

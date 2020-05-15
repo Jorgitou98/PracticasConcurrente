@@ -2,6 +2,7 @@ package Parte2;
 
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class MensajeSolicitaConexion extends Mensaje{
 	
 	String idCliente;
