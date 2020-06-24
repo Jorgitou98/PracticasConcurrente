@@ -1,12 +1,8 @@
 package Ejercicio3;
 
+
 public class Producto {
 	private int valor;
-
-	
-	public Producto() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	public Producto(int valor) {
 		super();

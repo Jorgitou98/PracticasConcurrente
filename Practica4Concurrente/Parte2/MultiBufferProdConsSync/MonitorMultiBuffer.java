@@ -1,6 +1,7 @@
 package MultiBufferProdConsSync;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import MultiBufferProdConsLockCond.Producto;
 
@@ -9,7 +10,7 @@ public class MonitorMultiBuffer {
 	private Producto[] buff = new Producto[TAM];
 	private int ini = 0, fin = 0, cont = 0;
 	
-	synchronized void producir(ArrayList<Producto> prod) throws InterruptedException {
+	synchronized void producir(List<Producto> prod) throws InterruptedException {
 		while(TAM - cont < prod.size()) wait();
 		for(Producto p : prod) {
 			buff[ini] = p;
@@ -27,9 +28,9 @@ public class MonitorMultiBuffer {
 		notifyAll();
 	}
 	
-	synchronized ArrayList<Producto> consumir(int cantidad) throws InterruptedException {
+	synchronized List<Producto> consumir(int cantidad) throws InterruptedException {
 		while(cont < cantidad) wait();
-		ArrayList<Producto> consumidos = new ArrayList<Producto>();
+		List<Producto> consumidos = new ArrayList<Producto>();
 		for(int i = 0; i < cantidad; ++i) {
 			consumidos.add(buff[fin]);
 			fin = (fin + 1) % TAM;

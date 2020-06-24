@@ -1,5 +1,6 @@
 package Ejercicio3;
 
+
 public interface Almacen {
 	/**
 	* Almacena (como ultimo) un producto en el almac´en. Si no hay

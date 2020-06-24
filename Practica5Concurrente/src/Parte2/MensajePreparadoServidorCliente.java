@@ -5,8 +5,12 @@ import java.net.InetAddress;
 @SuppressWarnings("serial")
 public class MensajePreparadoServidorCliente extends Mensaje {
 	
+	// Host del Emisor para que el receptor puede obtener el socket con él
 	InetAddress dirHost;
+	
+	// Puerto donde está el Emisor esperando al receptor
 	int puerto;
+	
 	public MensajePreparadoServidorCliente(String origen, String fin, InetAddress dirHost, int puerto) {
 		super(origen, fin);
 		this.dirHost = dirHost;
@@ -14,7 +18,6 @@ public class MensajePreparadoServidorCliente extends Mensaje {
 	}
 	@Override
 	public Tipo getTipo() {
-		// TODO Auto-generated method stub
 		return Tipo.PREPARADOSERVIDORCLIENTE;
 	}
 	public InetAddress getDirHost() {

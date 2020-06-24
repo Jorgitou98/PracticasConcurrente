@@ -24,7 +24,6 @@ public class Parte1 {
 		try {
 			Thread.sleep(T);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(currentThread.getId());

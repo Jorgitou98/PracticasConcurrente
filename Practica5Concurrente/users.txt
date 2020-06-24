@@ -1,6 +1,10 @@
 juan
-ejemplo.txt iniQuijote.txt
+preposiciones.txt iniQuijote.txt letraHimnoItalia.txt
 pepe
 probando.txt relatoBorges.txt
 jorge
-relatoBorges.txt iniQuijote.txt
+relatoBorges.txt iniQuijote.txt letraHimnoItalia.txt
+lucia
+letraHimnoItalia.txt relatoBorges.txt
+alfredo
+letraHimnoItalia.txt preposiciones.txt

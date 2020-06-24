@@ -3,7 +3,7 @@ package Parte2;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
+import java.util.Set;
 
 public class OyenteServidor extends Thread{
 	private ObjectInputStream reader;
@@ -22,9 +22,8 @@ public class OyenteServidor extends Thread{
 					Mensaje m = (Mensaje) reader.readObject();
 					switch(m.getTipo()) {
 					case CONFIRMACONEXION:
-						MensajeConfirmaConexion mCC = (MensajeConfirmaConexion) m;
 						System.out.println("----------------------------------------------------");
-						System.out.println("Conexión establecida por parte del usuario " + mCC.getFin());
+						System.out.println("Conexión establecida por parte del usuario " + miCliente.getIdUsuario());
 						System.out.println("----------------------------------------------------");
 						break;
 					case CONFIRMALISTAUSUARIOS:
@@ -35,7 +34,7 @@ public class OyenteServidor extends Thread{
 						System.out.println("Lista de usuarios pedida por " + mLU.getFin() + ":");
 						System.out.println("---------------------------------------");
 						int numUsuarioMostrado = 1;
-						for (Pair <String, List<String>> par: mLU.getListaUsuariosConectados()) {
+						for (Pair <String, Set<String>> par: mLU.getListaUsuariosConectados()) {
 							System.out.println("Usuario " + numUsuarioMostrado + ": " + par.getKey());
 							System.out.println("Ficheros de " + par.getKey() + ":");
 							for(String fichero: par.getValue()) {
@@ -51,7 +50,7 @@ public class OyenteServidor extends Thread{
 						
 						// Devolvemos un MensajePreparadoClienteServidor a nuestro OyenteCliente. Ponemos en su campo fin el id del cliente que nos lo pidio: mEF.getOrigen()
 						// Y el puerto donde la esperamos para mandale el fichero en otro porceso Emisor
-						writer.writeObject(new MensajePreparadoClienteServidor("OyenteServidor", mEF.getOrigen() , miCliente.getDirHost(), mEF.getPuerto()));
+						writer.writeObject(new MensajePreparadoClienteServidor("Oyente Servidor", mEF.getOrigen() , miCliente.getDirHost(), mEF.getPuerto()));
 						System.out.println("---------------------------------------");
 						System.out.println("Mi cliente " + miCliente.getIdUsuario() + " va a emitir el fichero " + mEF.getFicheroAEmitir());
 						System.out.println("---------------------------------------");

@@ -1,25 +1,37 @@
 package Parte2;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MonitorInfoUsuarioSistema {
-	private Map<String, List<String>> infoUsuariosDelSistema = new HashMap<>();
+	
+	/*
+	 * Tabla que para cada usuario lleva un conjunto (no ordenado) de los ficheros que posee
+	 */
+	private Map<String, Set<String>> infoUsuariosDelSistema = new HashMap<>();
 	
 	
-	// Si el usuario ya lo tengo almacenado no hago nada. Si no, lo añado con la lista de ficheros que me haya dicho
-	// Devuelvo un booleano indicando si se ha insertado un nuevo Usuario al sistema o no
-	synchronized boolean anadeUsuarioAlSistema(String usuario, List<String> listaDeFicheros) {
+	/* Operacion para añadir un usuario y su lista de ficheros al sistema.
+	 * Si el usuario está ya solo añado los ficheros para que estén los que no estuvieran ya
+	 * Si no añado al nuevo usuario y su lista de fihceros
+	 */
+	synchronized void anadeUsuarioAlSistema(String usuario, List<String> listaDeFicheros) {
 		
 		if(!infoUsuariosDelSistema.containsKey(usuario)) {
-			infoUsuariosDelSistema.put(usuario, listaDeFicheros);
-			return true;
+			infoUsuariosDelSistema.put(usuario, new HashSet<>(listaDeFicheros));
 		}
-		return false;
+		else {
+				infoUsuariosDelSistema.get(usuario).addAll(listaDeFicheros);
+		}
 	}
 	
-	synchronized List<String> dameListaFicheros(String usuario) {
+	/*
+	 * Operación para devolver la lista de ficheros de un usuario
+	 */
+	synchronized Set<String> dameListaFicheros(String usuario) {
 		return infoUsuariosDelSistema.get(usuario);
 	}
 

@@ -1,20 +1,22 @@
 package ProductoresConsumidores;
 
+
 public class MonitorProdCons {
 	private final int TAM = 1000;
-	private Producto[] buff = new Producto[TAM];
-	private int ini = 0, fin = 0, cont = 0;
+	private volatile Producto[] buff = new Producto[TAM];
+	private volatile int ini = 0, fin = 0, cont = 0;
 	
-	synchronized void producir(Producto prod) throws InterruptedException {
+	public synchronized void producir(Producto prod) throws InterruptedException {
 		while(cont == TAM) wait();
 		buff[ini] = prod;
+		buff = buff;
 		System.out.println("Producido: " + prod.getValor());
 		ini = (ini + 1) % TAM;
 		cont++;
-		notify();
+		notifyAll();
 	}
 	
-	synchronized Producto consumir() throws InterruptedException  {
+	public synchronized Producto consumir() throws InterruptedException  {
 		Producto p;
 		while(cont == 0) wait();
 		p = buff[fin];
@@ -22,7 +24,8 @@ public class MonitorProdCons {
 		System.out.println("Consumido: " + p.getValor());
 		fin= (fin + 1) % TAM;
 		cont--;
-		notify();
+		notifyAll();
 		return p;
+		
 	}
 }

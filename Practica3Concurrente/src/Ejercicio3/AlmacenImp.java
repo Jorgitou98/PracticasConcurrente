@@ -1,19 +1,21 @@
 package Ejercicio3;
 
+
 import java.util.concurrent.Semaphore;
 
 public class AlmacenImp implements Almacen{
 	
 	private static final int TAM = 10;
-	public Semaphore lleno = new Semaphore(0), vacio = new Semaphore(TAM);
-	public Semaphore mutexp = new Semaphore(1), mutexc = new Semaphore(1);
-	public Producto[] buff = new Producto[TAM];
-	public int ini = 0, fin = 0;
+	private Semaphore lleno = new Semaphore(0), vacio = new Semaphore(TAM);
+	private Semaphore mutexp = new Semaphore(1), mutexc = new Semaphore(1);
+	private volatile Producto[] buff = new Producto[TAM];
+	private volatile int ini = 0, fin = 0;
 	@Override
 	public void almacenar(Producto producto) throws InterruptedException {
 		vacio.acquire();
 		mutexp.acquire();
 		buff[ini] = producto;
+		buff = buff;
 		System.out.println("Elemento producido: " + producto.getValor());
 		ini = (ini + 1) % TAM;
 		mutexp.release();

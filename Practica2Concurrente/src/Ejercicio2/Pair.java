@@ -1,5 +1,6 @@
 package Ejercicio2;
 
+
 public class Pair<T1,T2> {
 	private T1 key;
 	private T2 value;

@@ -1,17 +1,19 @@
 package MultiBufferProdConsLockCond;
 
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.*;
 
 public class MonitorMultiBufferLockCond {
-	final Lock lock = new ReentrantLock();
-	final Condition esperaProd = lock.newCondition();
-	final Condition esperaCons = lock.newCondition();
+	private final Lock lock = new ReentrantLock();
+	private final Condition esperaProd = lock.newCondition();
+	private final Condition esperaCons = lock.newCondition();
 	private final int TAM = 500;
-	private Producto[] buff = new Producto[TAM];
-	private int ini = 0, fin = 0, cont = 0;
+	private volatile Producto[] buff = new Producto[TAM];
+	private volatile int ini = 0, fin = 0, cont = 0;
 	
-	public void producir(ArrayList<Producto> prod) throws InterruptedException {
+	public void producir(List<Producto> prod) throws InterruptedException {
 		lock.lock();
 		while(TAM - cont < prod.size()) esperaProd.await();
 		for(Producto p : prod) {
@@ -29,7 +31,7 @@ public class MonitorMultiBufferLockCond {
 		lock.unlock();
 	}
 	
-	public ArrayList<Producto> consumir(int cantidad) throws InterruptedException {
+	public List<Producto> consumir(int cantidad) throws InterruptedException {
 		lock.lock();
 		while(cont < cantidad) esperaCons.await();
 		ArrayList<Producto> consumidos = new ArrayList<Producto>();
@@ -48,7 +50,6 @@ public class MonitorMultiBufferLockCond {
 		
 		esperaProd.signalAll();
 		lock.unlock();
-		return consumidos;
-		
+		return consumidos;		
 	}
 }

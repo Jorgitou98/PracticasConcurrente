@@ -1,18 +1,15 @@
 package Ejercicio2;
 
-import java.util.Arrays;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LockTicket {
-	private int m;
-	private static volatile int next = 0;
-	private static volatile AtomicInteger number = new AtomicInteger(0);
-	private static volatile int turno[];
+	private volatile int next = 0;
+	private volatile AtomicInteger number = new AtomicInteger(0);
+	private volatile int turno[];
+	
 	public LockTicket(int m) {
-		super();
-		this.m = m;
 		turno = new int [2*m];
-		Arrays.fill(turno, -1);
 	}
 	
 	public void takeLock(int i) {
@@ -23,7 +20,7 @@ public class LockTicket {
 		}
 	}
 	
-	public void releaseLock(int i) {
+	public void releaseLock() {
 		next = next+1;
 	}
 	

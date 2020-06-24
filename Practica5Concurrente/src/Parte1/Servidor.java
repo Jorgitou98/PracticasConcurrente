@@ -14,7 +14,10 @@ public class Servidor {
 		ServerSocket serverSocket = new ServerSocket(puerto);
 		
 		while(true) {
+			// Esperamos al cliente y obtenemos así el canal de comunicación con él
 			Socket socket = serverSocket.accept();
+			
+			// Creamos un nuevo proceso que gestione la petición del cliente
 			(new GestionaCliente(socket)).start();
 		}
 	}

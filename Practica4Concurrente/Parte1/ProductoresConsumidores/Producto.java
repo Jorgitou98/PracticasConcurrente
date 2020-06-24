@@ -1,5 +1,6 @@
 package ProductoresConsumidores;
 
+
 public class Producto {
 	private int valor;
 

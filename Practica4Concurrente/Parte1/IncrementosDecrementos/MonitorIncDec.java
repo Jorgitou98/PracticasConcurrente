@@ -1,11 +1,12 @@
 package IncrementosDecrementos;
 
+
 public class MonitorIncDec {
-	private int n = 0;
-	synchronized void inc() {
+	private volatile int n = 0;
+	public synchronized void inc() {
 		n = n+1;
 	}
-	synchronized void dec() {
+	public synchronized void dec() {
 		n = n-1;
 	}
 	public int getN() {

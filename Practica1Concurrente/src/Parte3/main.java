@@ -6,7 +6,8 @@ private static final int N = 3;
 public static int[][] A = new int[N][N];
 public static int[][] B = new int[N][N];
 public static int[][] C = new int[N][N];
-	public static void main(String [] args) throws InterruptedException {
+
+public static void main(String [] args) throws InterruptedException {
 		Thread[] hilos = new Thread[N];
 		for (int i = 0; i < N; ++i)
 			for (int j = 0; j < N; ++j) {
@@ -25,7 +26,7 @@ public static int[][] C = new int[N][N];
 		}
 		for (int i = 0; i < N; ++i)
 			for (int j = 0; j < N; ++j) {
-				System.out.println(C[i][j]);
+				System.out.println(C[i][j] + " ");
 			}
 	} 
 

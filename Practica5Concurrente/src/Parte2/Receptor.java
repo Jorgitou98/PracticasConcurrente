@@ -16,19 +16,33 @@ public class Receptor extends Thread {
 	}
 	
 	public void run() {
-		Socket socket;
 		try {
-			socket = new Socket(dirHost, puerto);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));			
-			String linea, fichero = "";
-			while((linea=reader.readLine()) != null) {
-				fichero += linea + '\n';
+			Socket socket = new Socket(dirHost, puerto);
+			
+			// Obtenemos un flujo para leer el fichero que nos va a enviar el emisor
+			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			
+			if(reader.readLine().equals("Existe")){
+			
+			// Leemos linea a linea el fichero
+			String linea = reader.readLine(), ficheroRecibido = "";
+			while(linea != null) {
+				ficheroRecibido += linea;
+				linea = reader.readLine();
+				if(linea != null) ficheroRecibido += "\n";
 			};
+			
+			// Escribimos por pantalla el fichero leído
 			System.out.println("Fichero recibido:");
 			System.out.println("---------------------------------------");
-			System.out.println(fichero);
+			System.out.println(ficheroRecibido);
 			System.out.println("---------------------------------------");
+		}
+			else {
+				System.out.println("El fichero solicitado no existe y no se puede abrir");
+			}
 			reader.close();
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
